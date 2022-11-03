@@ -5,11 +5,14 @@ import { UserDTO } from "./dto/user.dto";
 import { UserRepository } from "./user.repository";
 import * as bcrypt from "bcrypt";
 import { User } from "./entity/user.entity";
+import { Payload } from "./security/payload.interface";
 
 @Injectable()
 export class UserService {
     constructor(
         @InjectRepository(UserRepository)
+        private userService: UserService,
+
         private userRepository: UserRepository
     ){}
 
@@ -27,5 +30,6 @@ export class UserService {
             user.password, 10,
         );
         return Promise.resolve();
-    }   
+    }
+
 }

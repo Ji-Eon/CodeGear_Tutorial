@@ -1,4 +1,5 @@
-import { Body, Controller, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { Request,Response } from 'express';
 import { AuthService } from './auth.service';
 import { UserDTO } from './dto/user.dto';
@@ -18,5 +19,12 @@ export class AuthController {
 
         res.setHeader('Authorization', 'Bearer'+jwt.accessToken);
         return res.json(jwt);
+    }
+
+    @Get('/authenticate')
+    @UseGuards(AuthGuard())
+    isAuthenticated(@Req() req: Request): any{
+        const user: any = req.user;
+        return user;
     }
 }
