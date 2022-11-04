@@ -22,7 +22,13 @@ export class AuthController {
         const jwt = await this.authService.validateUser(userDTO)
 
         res.setHeader('Authorization', 'Bearer'+jwt.accessToken);
-        return res.json(jwt);
+        res.cookie('jwt',jwt.accessToken,{
+            httpOnly: true,
+            maxAge: 24 * 60 * 60 * 1000
+        })
+        return res.send({
+            message:"Success"
+        })
     }
 
     @Get('/authenticate')
@@ -37,7 +43,25 @@ export class AuthController {
     adminRole(@Req() req: Request): any {
         const user: any = req.user;
         return user;
-}
+    }
+
+    @Get('/cookies')
+    getCookies(@Req() req: Request, @Res() res: Response): any{
+        const jwt = req.cookies['jwt'];
+
+        return res.send(jwt);
+    }
+
+    @Post('/logout')
+    logout(@Req() req: Request, @Res() res: Response): any{
+        res.cookie('jwt', '', {
+            maxAge: 0
+        });
+
+        return res.send({
+            message: 'Success'
+        });
+    }
 
    
 }
