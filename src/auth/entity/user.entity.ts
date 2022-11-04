@@ -12,7 +12,6 @@ export class User {
     @Column()
     password: string;
 
-    //eager -> join 된 데이터도 같이 가져와줌
-    @OneToMany(type=>UserAuthority, userAuthority => userAuthority.user{eager: true})
+    @OneToMany(()=>UserAuthority, userAuthority => userAuthority.user, {eager: true})
     authorities?: any[];
 }
